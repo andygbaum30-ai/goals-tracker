@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Union30 GA Chart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+
+      <div class="tabbar">
+        <button id="tab-log" class="tab-btn active" type="button">Log</button>
+        <button id="tab-stats" class="tab-btn hidden" type="button">Stats</button>
+      </div>
+
+      <div id="gk-header" class="gk-header hidden">
+        <div id="gk-summary" class="gk-summary"></div>
+        <div class="gk-edit">EDIT</div>
+      </div>
+
+      <!-- LOG TAB -->
+      <div id="panel-log" class="panel">
+
+        <section id="step-info" class="step">
+          <h2 class="step-title">Goalkeeper</h2>
+          <p class="step-sub">Stays on screen while you log — no need to re-enter it.</p>
+
+          <div class="field-group">
+            <label for="gk-name">Name</label>
+            <input type="text" id="gk-name" placeholder="e.g. Jordan Casey" autocomplete="off" />
+          </div>
+          <div class="field-group">
+            <label for="gk-age">Age Group</label>
+            <input type="text" id="gk-age" placeholder="e.g. U14" autocomplete="off" />
+          </div>
+          <div class="field-group">
+            <label for="gk-level">Level of Play</label>
+            <input type="text" id="gk-level" placeholder="e.g. Academy" autocomplete="off" />
+          </div>
+
+          <button id="start-logging" class="btn-primary" type="button" disabled>Start Logging</button>
+          <p id="gk-invalid-hint" class="hint">Fill in all three fields to start logging</p>
+        </section>
+
+        <section id="step-origin" class="step hidden">
+          <div class="step-header">
+            <h2 class="step-title">Origin Zone</h2>
+            <span class="step-count">STEP 2 / 4</span>
+          </div>
+          <div class="field-diagram">
+            <div class="field-box"></div>
+            <div class="field-goal-line"></div>
+            <div class="zone-grid">
+              <button class="zone-tile" data-zone="Deep Zone" style="grid-column:1/4;grid-row:1">Deep Zone</button>
+              <button class="zone-tile" data-zone="Wide Zone Left" style="grid-column:1;grid-row:2">Wide Left</button>
+              <button class="zone-tile" data-zone="Shooting Zone" style="grid-column:2;grid-row:2">Shooting</button>
+              <button class="zone-tile" data-zone="Wide Zone Right" style="grid-column:3;grid-row:2">Wide Right</button>
+              <button class="zone-tile" data-zone="Cutback Zone Left" style="grid-column:1;grid-row:3">Cutback Left</button>
+              <button class="zone-tile" data-zone="Danger Zone" style="grid-column:2;grid-row:3">Danger Zone</button>
+              <button class="zone-tile" data-zone="Cutback Zone Right" style="grid-column:3;grid-row:3">Cutback Right</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="step-finish" class="step hidden">
+          <div class="step-header">
+            <h2 class="step-title">Finish Type</h2>
+            <span class="step-count">STEP 3 / 4</span>
+          </div>
+          <div class="finish-grid">
+            <button class="finish-tile" data-finish="Direct Shot">Direct Shot</button>
+            <button class="finish-tile" data-finish="Strike">Strike</button>
+            <button class="finish-tile" data-finish="Own Goal">Own Goal</button>
+            <button class="finish-tile" data-finish="Header">Header</button>
+          </div>
+        </section>
+
+        <section id="step-goal" class="step hidden">
+          <div class="step-header">
+            <h2 class="step-title">Goal Entry</h2>
+            <span class="step-count">STEP 4 / 4</span>
+          </div>
+          <div class="net-diagram">
+            <div class="net-pattern"></div>
+            <div class="net-grid">
+              <button class="zone-tile" data-zone="Top Left Corner" style="grid-column:1;grid-row:1">Top Left</button>
+              <button class="zone-tile" data-zone="Top Center" style="grid-column:2;grid-row:1">Top Center</button>
+              <button class="zone-tile" data-zone="Top Right Corner" style="grid-column:3;grid-row:1">Top Right</button>
+              <button class="zone-tile" data-zone="Bottom Left Corner" style="grid-column:1;grid-row:2">Low Left</button>
+              <button class="zone-tile" data-zone="Bottom Center" style="grid-column:2;grid-row:2">Low Center</button>
+              <button class="zone-tile" data-zone="Bottom Right Corner" style="grid-column:3;grid-row:2">Low Right</button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- STATS TAB -->
+      <div id="panel-stats" class="panel hidden">
+        <h2 class="step-title">GK Stats</h2>
+        <input type="text" id="stats-search" placeholder="Search goalkeeper name…" autocomplete="off" />
+        <div id="stats-recent" class="chip-row"></div>
+
+        <div id="stats-result" class="hidden">
+          <div class="insight-card">
+            <div class="insight-label">Pattern to watch</div>
+            <div id="stats-insight" class="insight-text"></div>
+          </div>
+          <div id="stats-total" class="stats-total"></div>
+
+          <h3 class="breakdown-title">By Origin Zone</h3>
+          <div id="stats-origin" class="breakdown-list"></div>
+
+          <h3 class="breakdown-title">By Finish Type</h3>
+          <div id="stats-finish" class="breakdown-list"></div>
+
+          <h3 class="breakdown-title">By Goal Entry Zone</h3>
+          <div id="stats-entry" class="breakdown-list"></div>
+        </div>
+
+        <div id="stats-empty" class="empty-state">Type or tap a name above to see that goalkeeper's breakdown.</div>
+      </div>
+
+      <!-- CONFIRMATION SHEET -->
+      <div id="confirm-sheet" class="sheet-overlay hidden">
+        <div class="sheet">
+          <div class="sheet-label">Goal Logged</div>
+          <div id="confirm-gk" class="sheet-gk"></div>
+          <div id="confirm-sequence" class="sheet-sequence"></div>
+          <div id="confirm-pct" class="sheet-pct"></div>
+          <button id="confirm-dismiss" class="btn-primary" type="button">Log Next Goal</button>
+          <div class="sheet-tagline">You'll Never Walk Alone</div>
+        </div>
+      </div>
+
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
