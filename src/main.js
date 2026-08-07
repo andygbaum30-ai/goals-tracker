@@ -37,10 +37,14 @@ const gkLevelInput = document.getElementById('gk-level');
 const startLoggingBtn = document.getElementById('start-logging');
 const gkInvalidHint = document.getElementById('gk-invalid-hint');
 
+const stepWelcome = document.getElementById('step-welcome');
+const welcomeContinueBtn = document.getElementById('welcome-continue');
 const stepInfo = document.getElementById('step-info');
 const stepOrigin = document.getElementById('step-origin');
 const stepFinish = document.getElementById('step-finish');
 const stepGoal = document.getElementById('step-goal');
+
+const WELCOMED_KEY = 'gk-tracker-welcomed';
 
 const confirmSheet = document.getElementById('confirm-sheet');
 const confirmGk = document.getElementById('confirm-gk');
@@ -59,7 +63,7 @@ const statsFinish = document.getElementById('stats-finish');
 const statsEntry = document.getElementById('stats-entry');
 
 // 3. Flow State
-let step = 'info'; // info | origin | finish | goal
+let step = 'info'; // welcome | info | origin | finish | goal
 let tab = 'log'; // log | stats
 let selectedOrigin = null;
 let selectedFinish = null;
@@ -90,12 +94,13 @@ function updateStartButton() {
 
 function setStep(next) {
   step = next;
+  stepWelcome.classList.toggle('hidden', step !== 'welcome');
   stepInfo.classList.toggle('hidden', step !== 'info');
   stepOrigin.classList.toggle('hidden', step !== 'origin');
   stepFinish.classList.toggle('hidden', step !== 'finish');
   stepGoal.classList.toggle('hidden', step !== 'goal');
 
-  const showHeader = step !== 'info';
+  const showHeader = step !== 'welcome' && step !== 'info';
   gkHeader.classList.toggle('hidden', !showHeader);
   if (showHeader) gkSummary.textContent = gkSummaryLine();
 }
@@ -112,6 +117,12 @@ function setTab(next) {
 // --- Tab bar ---
 tabLogBtn.addEventListener('click', () => setTab('log'));
 tabStatsBtn.addEventListener('click', () => setTab('stats'));
+
+// --- Welcome step ---
+welcomeContinueBtn.addEventListener('click', () => {
+  localStorage.setItem(WELCOMED_KEY, '1');
+  setStep('info');
+});
 
 // --- GK info step ---
 gkHeader.addEventListener('click', () => setStep('info'));
@@ -309,6 +320,6 @@ async function loadStatsFor(name) {
 
 // 4. Initial render
 updateStartButton();
-setStep('info');
+setStep(localStorage.getItem(WELCOMED_KEY) ? 'info' : 'welcome');
 // Stats tab has no visible entry point right now, but stays reachable at /#stats.
 setTab(window.location.hash === '#stats' ? 'stats' : 'log');
