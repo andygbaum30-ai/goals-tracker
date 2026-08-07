@@ -458,8 +458,8 @@ input::placeholder {
 
 .sheet-tagline {
   text-align: center;
-  font: 600 italic 13px/1 "Barlow Condensed", sans-serif;
+  font: 700 italic 22px/1.2 "Barlow Condensed", sans-serif;
   letter-spacing: 0.4px;
-  color: var(--text-muted-4);
-  margin-top: 14px;
+  color: var(--accent);
+  margin-top: 18px;
 }
